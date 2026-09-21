@@ -2,332 +2,496 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lanzador de Mensajes WhatsApp</title>
+    <!-- VIEWPORT: Hace que en el móvil las letras se vean grandes y cerca -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lanzador Móvil WhatsApp</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f0f2f5; margin: 30px; }
-        .contenedor { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        h1 { color: #075e54; margin-top: 0; }
-        .mensaje-box { background: #e7fce8; border-left: 4px solid #25d366; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-size: 14px; white-space: pre-wrap; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        tr { border-bottom: 1px solid #e0e0e0; }
-        tr:hover { background-color: #f9f9f9; }
-        th { background-color: #f8f9fa; padding: 12px; text-align: left; color: #555; }
-        .btn-wpp { background-color: #25d366; color: white; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; display: inline-block; transition: 0.2s; }
-        .btn-wpp:hover { background-color: #128c7e; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0b141a;
+            color: #e9edef;
+            margin: 0;
+            padding: 16px;
+        }
+        .header {
+            text-align: center;
+            padding: 10px 0 20px 0;
+        }
+        h1 {
+            font-size: 22px;
+            color: #25d366;
+            margin: 0 0 8px 0;
+        }
+        p {
+            font-size: 15px;
+            color: #8696a0;
+            margin: 0;
+        }
+        .tarjeta {
+            background-color: #111b21;
+            border: 1px solid #202c33;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .fila-superior {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .numero-contacto {
+            font-size: 19px;
+            font-weight: 700;
+            color: #ffffff;
+            font-family: monospace;
+            letter-spacing: 0.5px;
+        }
+        .check-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .check-container input {
+            width: 22px;
+            height: 22px;
+            accent-color: #25d366;
+            cursor: pointer;
+        }
+        .check-label {
+            font-size: 15px;
+            color: #8696a0;
+        }
+        .btn-abrir {
+            width: 100%;
+            background-color: #00a884;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+            transition: background 0.15s ease;
+        }
+        .btn-abrir:active {
+            background-color: #008069;
+            transform: scale(0.98);
+        }
+        .tarjeta-completada {
+            opacity: 0.5;
+            background-color: #0d1418;
+        }
     </style>
 </head>
 <body>
-    <div class="contenedor">
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Teléfono</th>
-                    <th>Acción directa</th>
-                    <th style="text-align: center;">¿Enviado?</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#1</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491122769251</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491122769251&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#2</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491124030329</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491124030329&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#3</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491126912576</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491126912576&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#4</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491127459673</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491127459673&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#5</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491128580283</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491128580283&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#6</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491130691400</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491130691400&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#7</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491132881455</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491132881455&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#8</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491135561999</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491135561999&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#9</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491144141242</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491144141242&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#10</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491144456279</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491144456279&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#11</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491150165399</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491150165399&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#12</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491151465348</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491151465348&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#13</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491158506004</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491158506004&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#14</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491161965270</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491161965270&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#15</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491164327651</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491164327651&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#16</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491164657008</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491164657008&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#17</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491165656080</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491165656080&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#18</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491167889800</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491167889800&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#19</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491167985839</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491167985839&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#20</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491168377867</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491168377867&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#21</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491169568470</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491169568470&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#22</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491170827462</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491170827462&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#23</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5491176577763</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5491176577763&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#24</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5492617551644</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5492617551644&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#25</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5492966600243</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5492966600243&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#26</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5493513020069</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5493513020069&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-    <tr>
-        <td style="font-weight: bold; padding: 12px;">#27</td>
-        <td style="font-size: 16px; padding: 12px; font-family: monospace;">+5493541704639</td>
-        <td style="padding: 12px;">
-            <a href="https://web.whatsapp.com/send?phone=5493541704639&text=Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F" target="_blank" class="btn-wpp">🟢 Abrir chat en 1 clic</a>
-        </td>
-        <td style="text-align: center; padding: 12px;">
-            <input type="checkbox" style="transform: scale(1.4); cursor: pointer;">
-        </td>
-    </tr>
-    
-            </tbody>
-        </table>
+    <div class="header">
+        <h1>🚀 Lanzador WhatsApp Directo</h1>
+        <p>Toca el botón verde para saltar a la app en 1 segundo</p>
     </div>
+
+    
+    <div class="tarjeta" id="card_1">
+        <div class="fila-superior">
+            <span class="numero-contacto">#1 &nbsp; +5491122769251</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_1" onchange="guardarEstado('1')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491122769251')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_2">
+        <div class="fila-superior">
+            <span class="numero-contacto">#2 &nbsp; +5491124030329</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_2" onchange="guardarEstado('2')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491124030329')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_3">
+        <div class="fila-superior">
+            <span class="numero-contacto">#3 &nbsp; +5491126912576</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_3" onchange="guardarEstado('3')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491126912576')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_4">
+        <div class="fila-superior">
+            <span class="numero-contacto">#4 &nbsp; +5491127459673</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_4" onchange="guardarEstado('4')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491127459673')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_5">
+        <div class="fila-superior">
+            <span class="numero-contacto">#5 &nbsp; +5491128580283</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_5" onchange="guardarEstado('5')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491128580283')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_6">
+        <div class="fila-superior">
+            <span class="numero-contacto">#6 &nbsp; +5491130691400</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_6" onchange="guardarEstado('6')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491130691400')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_7">
+        <div class="fila-superior">
+            <span class="numero-contacto">#7 &nbsp; +5491132881455</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_7" onchange="guardarEstado('7')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491132881455')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_8">
+        <div class="fila-superior">
+            <span class="numero-contacto">#8 &nbsp; +5491135561999</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_8" onchange="guardarEstado('8')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491135561999')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_9">
+        <div class="fila-superior">
+            <span class="numero-contacto">#9 &nbsp; +5491144141242</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_9" onchange="guardarEstado('9')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491144141242')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_10">
+        <div class="fila-superior">
+            <span class="numero-contacto">#10 &nbsp; +5491144456279</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_10" onchange="guardarEstado('10')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491144456279')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_11">
+        <div class="fila-superior">
+            <span class="numero-contacto">#11 &nbsp; +5491150165399</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_11" onchange="guardarEstado('11')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491150165399')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_12">
+        <div class="fila-superior">
+            <span class="numero-contacto">#12 &nbsp; +5491151465348</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_12" onchange="guardarEstado('12')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491151465348')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_13">
+        <div class="fila-superior">
+            <span class="numero-contacto">#13 &nbsp; +5491158506004</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_13" onchange="guardarEstado('13')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491158506004')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_14">
+        <div class="fila-superior">
+            <span class="numero-contacto">#14 &nbsp; +5491161965270</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_14" onchange="guardarEstado('14')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491161965270')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_15">
+        <div class="fila-superior">
+            <span class="numero-contacto">#15 &nbsp; +5491164327651</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_15" onchange="guardarEstado('15')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491164327651')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_16">
+        <div class="fila-superior">
+            <span class="numero-contacto">#16 &nbsp; +5491164657008</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_16" onchange="guardarEstado('16')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491164657008')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_17">
+        <div class="fila-superior">
+            <span class="numero-contacto">#17 &nbsp; +5491165656080</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_17" onchange="guardarEstado('17')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491165656080')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_18">
+        <div class="fila-superior">
+            <span class="numero-contacto">#18 &nbsp; +5491167889800</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_18" onchange="guardarEstado('18')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491167889800')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_19">
+        <div class="fila-superior">
+            <span class="numero-contacto">#19 &nbsp; +5491167985839</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_19" onchange="guardarEstado('19')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491167985839')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_20">
+        <div class="fila-superior">
+            <span class="numero-contacto">#20 &nbsp; +5491168377867</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_20" onchange="guardarEstado('20')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491168377867')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_21">
+        <div class="fila-superior">
+            <span class="numero-contacto">#21 &nbsp; +5491169568470</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_21" onchange="guardarEstado('21')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491169568470')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_22">
+        <div class="fila-superior">
+            <span class="numero-contacto">#22 &nbsp; +5491170827462</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_22" onchange="guardarEstado('22')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491170827462')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_23">
+        <div class="fila-superior">
+            <span class="numero-contacto">#23 &nbsp; +5491176577763</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_23" onchange="guardarEstado('23')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5491176577763')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_24">
+        <div class="fila-superior">
+            <span class="numero-contacto">#24 &nbsp; +5492617551644</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_24" onchange="guardarEstado('24')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5492617551644')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_25">
+        <div class="fila-superior">
+            <span class="numero-contacto">#25 &nbsp; +5492966600243</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_25" onchange="guardarEstado('25')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5492966600243')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_26">
+        <div class="fila-superior">
+            <span class="numero-contacto">#26 &nbsp; +5493513020069</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_26" onchange="guardarEstado('26')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5493513020069')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_27">
+        <div class="fila-superior">
+            <span class="numero-contacto">#27 &nbsp; +5493541704639</span>
+            <label class="check-container">
+                <input type="checkbox" id="check_27" onchange="guardarEstado('27')">
+                <span class="check-label">Enviado</span>
+            </label>
+        </div>
+        <button onclick="abrirWhatsApp('5493541704639')" class="btn-abrir">
+            🟢 ENVIAR MENSAJE
+        </button>
+    </div>
+    
+
+    <script>
+        const textoMsg = "Hola%20buenos%20d%C3%ADas%2C%20%C2%A1qu%C3%A9%20tal%21%0ATenemos%20una%20grafica%3A%20https%3A%2F%2Fwww.instagram.com%2F1111.grafica%2F%0AQueriamos%20ofrecerles%20nuestros%20servicios%20de%20Gr%C3%A1fica%2C%20imprenta%20y%20Carteler%C3%ADa.%0A%0AY%20tambien%20mostrarles%20que%20estamos%20haciendo%20para%20muchos%20clientes%20un%20*Link%20%2F%20Catalogo%20Online*%20%2C%20super%20veloz%2C%20en%20reemplazo%20de%20*Linktree*%2C%20a%20un%20valor%20buenisimo.%0AEste%20que%20hacemos%2C%20es%20much%C3%ADsimo%20mejor%2C%20m%C3%A1s%20r%C3%A1pido%2C%20y%20con%20dise%C3%B1o%20100%25%20personalizado%20a%20su%20gusto%2C%20con%20botones%20programados%20para%20hacer%20la%20funci%C3%B3n%20exacta%20que%20ustedes%20necesiten%20%28%20_botones%20directos%20a%20Whatsapp%2C%20listas%20de%20precios%2C%20galer%C3%ADa%20de%20fotos%2C%20mapas%2C%20sucursales%2C%20formularios%2C%20trivias%2C%20compras%20inclusive%2C%20etc..._%20%29.%20Te%20muestro%20unos%20ejemplos%20de%20distintas%20empresas%20%28cada%20una%20con%20su%20estilo%20y%20con%20lo%20que%20necesitaba%20poner%29%3A%0A%0AA%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fbaldoriamadrid%2F%0AB%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffrimaq%2F%0AC%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Ffourseasonsmx%2F%0AD%29%20https%3A%2F%2Fonceoncegrafica-1111.github.io%2Fpeluqueriaalvear%2F";
+
+        function abrirWhatsApp(tel) {
+            // Detecta si es celular o computadora automáticamente
+            const esCelular = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            
+            if (esCelular) {
+                // Protocolo nativo de celular: salta a la aplicación instalada directo
+                window.location.href = "whatsapp://send?phone=" + tel + "&text=" + textoMsg;
+            } else {
+                // En computadora salta a WhatsApp Web
+                window.open("https://web.whatsapp.com/send?phone=" + tel + "&text=" + textoMsg, "_blank");
+            }
+        }
+
+        function guardarEstado(id) {
+            const check = document.getElementById("check_" + id);
+            const card = document.getElementById("card_" + id);
+            if (check.checked) {
+                localStorage.setItem("wpp_" + id, "1");
+                card.classList.add("tarjeta-completada");
+            } else {
+                localStorage.removeItem("wpp_" + id);
+                card.classList.remove("tarjeta-completada");
+            }
+        }
+
+        // Restaurar casillas marcadas aunque se cierre el navegador
+        window.onload = function() {
+            for (let i = 1; i <= 27; i++) {
+                if (localStorage.getItem("wpp_" + i) === "1") {
+                    const check = document.getElementById("check_" + i);
+                    const card = document.getElementById("card_" + i);
+                    if (check && card) {
+                        check.checked = true;
+                        card.classList.add("tarjeta-completada");
+                    }
+                }
+            }
+        };
+    </script>
 </body>
 </html>
