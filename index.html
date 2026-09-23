@@ -2,495 +2,1249 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- VIEWPORT: Hace que en el móvil las letras se vean grandes y cerca -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lanzador Móvil WhatsApp</title>
+    <title>WhatsApp Rápido</title>
     <style>
         * { box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #0b141a;
             color: #e9edef;
             margin: 0;
-            padding: 16px;
+            padding: 10px;
         }
         .header {
             text-align: center;
-            padding: 10px 0 20px 0;
+            padding: 8px 0 12px 0;
         }
         h1 {
-            font-size: 22px;
+            font-size: 18px;
             color: #25d366;
-            margin: 0 0 8px 0;
+            margin: 0 0 6px 0;
         }
-        p {
-            font-size: 15px;
+        .contador-box {
+            background: #111b21;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
             color: #8696a0;
-            margin: 0;
+            border: 1px solid #202c33;
+        }
+        .contador-box b {
+            color: #25d366;
+        }
+        /* CONTENEDOR EN 2 COLUMNAS COMPACTAS */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
         }
         .tarjeta {
             background-color: #111b21;
             border: 1px solid #202c33;
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 10px 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
         }
-        .fila-superior {
+        .cabecera {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 6px;
         }
-        .numero-contacto {
-            font-size: 19px;
-            font-weight: 700;
-            color: #ffffff;
-            font-family: monospace;
-            letter-spacing: 0.5px;
+        .badge {
+            font-size: 11px;
+            font-weight: bold;
+            color: #8696a0;
+            background: #202c33;
+            padding: 2px 6px;
+            border-radius: 4px;
         }
-        .check-container {
+        .check-box {
             display: flex;
             align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-        .check-container input {
-            width: 22px;
-            height: 22px;
-            accent-color: #25d366;
-            cursor: pointer;
-        }
-        .check-label {
-            font-size: 15px;
+            gap: 4px;
+            font-size: 11px;
             color: #8696a0;
+            cursor: pointer;
         }
-        .btn-abrir {
+        .check-box input {
+            accent-color: #25d366;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            cursor: pointer;
+        }
+        .numero {
+            font-size: 13px;
+            font-weight: bold;
+            color: #ffffff;
+            font-family: monospace;
+            text-align: center;
+            margin: 6px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .btn-enviar {
             width: 100%;
             background-color: #00a884;
             color: #ffffff;
             border: none;
-            border-radius: 10px;
-            padding: 16px;
-            font-size: 18px;
+            border-radius: 8px;
+            padding: 11px 4px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
-            letter-spacing: 0.5px;
-            transition: background 0.15s ease;
+            gap: 4px;
+            transition: background 0.15s;
         }
-        .btn-abrir:active {
+        .btn-enviar:active {
             background-color: #008069;
-            transform: scale(0.98);
+            transform: scale(0.97);
         }
-        .tarjeta-completada {
-            opacity: 0.5;
+        /* ESTADO MARCADOS */
+        .tarjeta.completada {
+            opacity: 0.35;
             background-color: #0d1418;
+            border-color: #1a2328;
+        }
+        .tarjeta.completada .numero {
+            text-decoration: line-through;
+            color: #8696a0;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🚀 Lanzador WhatsApp Directo</h1>
-        <p>Toca el botón verde para saltar a la app en 1 segundo</p>
+        <h1>📲 Lanzador WhatsApp Rápido</h1>
+        <div class="contador-box">
+            Progreso: <b id="conteo-enviados">0</b> de <b>75</b> enviados
+        </div>
     </div>
 
-    
+    <div class="grid-container">
+        
     <div class="tarjeta" id="card_1">
-        <div class="fila-superior">
-            <span class="numero-contacto">#1 &nbsp; +5491122769251</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_1" onchange="guardarEstado('1')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#1</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_1" onchange="toggleManual('1')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491122769251')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491121699149</div>
+        <button onclick="abrirWhatsApp('5491121699149', '1')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_2">
-        <div class="fila-superior">
-            <span class="numero-contacto">#2 &nbsp; +5491124030329</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_2" onchange="guardarEstado('2')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#2</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_2" onchange="toggleManual('2')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491124030329')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491124548848</div>
+        <button onclick="abrirWhatsApp('5491124548848', '2')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_3">
-        <div class="fila-superior">
-            <span class="numero-contacto">#3 &nbsp; +5491126912576</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_3" onchange="guardarEstado('3')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#3</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_3" onchange="toggleManual('3')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491126912576')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491124975190</div>
+        <button onclick="abrirWhatsApp('5491124975190', '3')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_4">
-        <div class="fila-superior">
-            <span class="numero-contacto">#4 &nbsp; +5491127459673</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_4" onchange="guardarEstado('4')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#4</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_4" onchange="toggleManual('4')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491127459673')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491124981220</div>
+        <button onclick="abrirWhatsApp('5491124981220', '4')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_5">
-        <div class="fila-superior">
-            <span class="numero-contacto">#5 &nbsp; +5491128580283</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_5" onchange="guardarEstado('5')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#5</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_5" onchange="toggleManual('5')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491128580283')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491126488350</div>
+        <button onclick="abrirWhatsApp('5491126488350', '5')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_6">
-        <div class="fila-superior">
-            <span class="numero-contacto">#6 &nbsp; +5491130691400</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_6" onchange="guardarEstado('6')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#6</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_6" onchange="toggleManual('6')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491130691400')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491127275815</div>
+        <button onclick="abrirWhatsApp('5491127275815', '6')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_7">
-        <div class="fila-superior">
-            <span class="numero-contacto">#7 &nbsp; +5491132881455</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_7" onchange="guardarEstado('7')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#7</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_7" onchange="toggleManual('7')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491132881455')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491127555125</div>
+        <button onclick="abrirWhatsApp('5491127555125', '7')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_8">
-        <div class="fila-superior">
-            <span class="numero-contacto">#8 &nbsp; +5491135561999</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_8" onchange="guardarEstado('8')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#8</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_8" onchange="toggleManual('8')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491135561999')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491128948783</div>
+        <button onclick="abrirWhatsApp('5491128948783', '8')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_9">
-        <div class="fila-superior">
-            <span class="numero-contacto">#9 &nbsp; +5491144141242</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_9" onchange="guardarEstado('9')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#9</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_9" onchange="toggleManual('9')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491144141242')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491130014605</div>
+        <button onclick="abrirWhatsApp('5491130014605', '9')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_10">
-        <div class="fila-superior">
-            <span class="numero-contacto">#10 &nbsp; +5491144456279</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_10" onchange="guardarEstado('10')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#10</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_10" onchange="toggleManual('10')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491144456279')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491130266000</div>
+        <button onclick="abrirWhatsApp('5491130266000', '10')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_11">
-        <div class="fila-superior">
-            <span class="numero-contacto">#11 &nbsp; +5491150165399</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_11" onchange="guardarEstado('11')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#11</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_11" onchange="toggleManual('11')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491150165399')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491130351215</div>
+        <button onclick="abrirWhatsApp('5491130351215', '11')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_12">
-        <div class="fila-superior">
-            <span class="numero-contacto">#12 &nbsp; +5491151465348</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_12" onchange="guardarEstado('12')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#12</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_12" onchange="toggleManual('12')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491151465348')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491131369853</div>
+        <button onclick="abrirWhatsApp('5491131369853', '12')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_13">
-        <div class="fila-superior">
-            <span class="numero-contacto">#13 &nbsp; +5491158506004</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_13" onchange="guardarEstado('13')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#13</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_13" onchange="toggleManual('13')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491158506004')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491132155423</div>
+        <button onclick="abrirWhatsApp('5491132155423', '13')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_14">
-        <div class="fila-superior">
-            <span class="numero-contacto">#14 &nbsp; +5491161965270</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_14" onchange="guardarEstado('14')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#14</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_14" onchange="toggleManual('14')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491161965270')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491132330410</div>
+        <button onclick="abrirWhatsApp('5491132330410', '14')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_15">
-        <div class="fila-superior">
-            <span class="numero-contacto">#15 &nbsp; +5491164327651</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_15" onchange="guardarEstado('15')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#15</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_15" onchange="toggleManual('15')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491164327651')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491132950757</div>
+        <button onclick="abrirWhatsApp('5491132950757', '15')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_16">
-        <div class="fila-superior">
-            <span class="numero-contacto">#16 &nbsp; +5491164657008</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_16" onchange="guardarEstado('16')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#16</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_16" onchange="toggleManual('16')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491164657008')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491133824015</div>
+        <button onclick="abrirWhatsApp('5491133824015', '16')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_17">
-        <div class="fila-superior">
-            <span class="numero-contacto">#17 &nbsp; +5491165656080</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_17" onchange="guardarEstado('17')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#17</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_17" onchange="toggleManual('17')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491165656080')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491133924468</div>
+        <button onclick="abrirWhatsApp('5491133924468', '17')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_18">
-        <div class="fila-superior">
-            <span class="numero-contacto">#18 &nbsp; +5491167889800</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_18" onchange="guardarEstado('18')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#18</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_18" onchange="toggleManual('18')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491167889800')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491135051797</div>
+        <button onclick="abrirWhatsApp('5491135051797', '18')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_19">
-        <div class="fila-superior">
-            <span class="numero-contacto">#19 &nbsp; +5491167985839</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_19" onchange="guardarEstado('19')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#19</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_19" onchange="toggleManual('19')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491167985839')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491135070227</div>
+        <button onclick="abrirWhatsApp('5491135070227', '19')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_20">
-        <div class="fila-superior">
-            <span class="numero-contacto">#20 &nbsp; +5491168377867</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_20" onchange="guardarEstado('20')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#20</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_20" onchange="toggleManual('20')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491168377867')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491135326407</div>
+        <button onclick="abrirWhatsApp('5491135326407', '20')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_21">
-        <div class="fila-superior">
-            <span class="numero-contacto">#21 &nbsp; +5491169568470</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_21" onchange="guardarEstado('21')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#21</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_21" onchange="toggleManual('21')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491169568470')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491136342774</div>
+        <button onclick="abrirWhatsApp('5491136342774', '21')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_22">
-        <div class="fila-superior">
-            <span class="numero-contacto">#22 &nbsp; +5491170827462</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_22" onchange="guardarEstado('22')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#22</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_22" onchange="toggleManual('22')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491170827462')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491136698412</div>
+        <button onclick="abrirWhatsApp('5491136698412', '22')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_23">
-        <div class="fila-superior">
-            <span class="numero-contacto">#23 &nbsp; +5491176577763</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_23" onchange="guardarEstado('23')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#23</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_23" onchange="toggleManual('23')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5491176577763')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491136883110</div>
+        <button onclick="abrirWhatsApp('5491136883110', '23')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_24">
-        <div class="fila-superior">
-            <span class="numero-contacto">#24 &nbsp; +5492617551644</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_24" onchange="guardarEstado('24')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#24</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_24" onchange="toggleManual('24')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5492617551644')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491138021863</div>
+        <button onclick="abrirWhatsApp('5491138021863', '24')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_25">
-        <div class="fila-superior">
-            <span class="numero-contacto">#25 &nbsp; +5492966600243</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_25" onchange="guardarEstado('25')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#25</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_25" onchange="toggleManual('25')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5492966600243')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491138863357</div>
+        <button onclick="abrirWhatsApp('5491138863357', '25')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_26">
-        <div class="fila-superior">
-            <span class="numero-contacto">#26 &nbsp; +5493513020069</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_26" onchange="guardarEstado('26')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#26</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_26" onchange="toggleManual('26')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5493513020069')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491139433030</div>
+        <button onclick="abrirWhatsApp('5491139433030', '26')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
     <div class="tarjeta" id="card_27">
-        <div class="fila-superior">
-            <span class="numero-contacto">#27 &nbsp; +5493541704639</span>
-            <label class="check-container">
-                <input type="checkbox" id="check_27" onchange="guardarEstado('27')">
-                <span class="check-label">Enviado</span>
+        <div class="cabecera">
+            <span class="badge">#27</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_27" onchange="toggleManual('27')">
+                <span>Enviado</span>
             </label>
         </div>
-        <button onclick="abrirWhatsApp('5493541704639')" class="btn-abrir">
-            🟢 ENVIAR MENSAJE
+        <div class="numero">+5491139663210</div>
+        <button onclick="abrirWhatsApp('5491139663210', '27')" class="btn-enviar">
+            🟢 Enviar
         </button>
     </div>
     
+    <div class="tarjeta" id="card_28">
+        <div class="cabecera">
+            <span class="badge">#28</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_28" onchange="toggleManual('28')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491143485000</div>
+        <button onclick="abrirWhatsApp('5491143485000', '28')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_29">
+        <div class="cabecera">
+            <span class="badge">#29</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_29" onchange="toggleManual('29')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491144493205</div>
+        <button onclick="abrirWhatsApp('5491144493205', '29')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_30">
+        <div class="cabecera">
+            <span class="badge">#30</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_30" onchange="toggleManual('30')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491145723840</div>
+        <button onclick="abrirWhatsApp('5491145723840', '30')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_31">
+        <div class="cabecera">
+            <span class="badge">#31</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_31" onchange="toggleManual('31')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491147370248</div>
+        <button onclick="abrirWhatsApp('5491147370248', '31')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_32">
+        <div class="cabecera">
+            <span class="badge">#32</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_32" onchange="toggleManual('32')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491148132105</div>
+        <button onclick="abrirWhatsApp('5491148132105', '32')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_33">
+        <div class="cabecera">
+            <span class="badge">#33</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_33" onchange="toggleManual('33')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491148346096</div>
+        <button onclick="abrirWhatsApp('5491148346096', '33')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_34">
+        <div class="cabecera">
+            <span class="badge">#34</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_34" onchange="toggleManual('34')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491148437491</div>
+        <button onclick="abrirWhatsApp('5491148437491', '34')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_35">
+        <div class="cabecera">
+            <span class="badge">#35</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_35" onchange="toggleManual('35')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491150219254</div>
+        <button onclick="abrirWhatsApp('5491150219254', '35')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_36">
+        <div class="cabecera">
+            <span class="badge">#36</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_36" onchange="toggleManual('36')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491151169676</div>
+        <button onclick="abrirWhatsApp('5491151169676', '36')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_37">
+        <div class="cabecera">
+            <span class="badge">#37</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_37" onchange="toggleManual('37')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491155235330</div>
+        <button onclick="abrirWhatsApp('5491155235330', '37')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_38">
+        <div class="cabecera">
+            <span class="badge">#38</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_38" onchange="toggleManual('38')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491156221620</div>
+        <button onclick="abrirWhatsApp('5491156221620', '38')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_39">
+        <div class="cabecera">
+            <span class="badge">#39</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_39" onchange="toggleManual('39')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491158663925</div>
+        <button onclick="abrirWhatsApp('5491158663925', '39')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_40">
+        <div class="cabecera">
+            <span class="badge">#40</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_40" onchange="toggleManual('40')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491159308753</div>
+        <button onclick="abrirWhatsApp('5491159308753', '40')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_41">
+        <div class="cabecera">
+            <span class="badge">#41</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_41" onchange="toggleManual('41')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491159345836</div>
+        <button onclick="abrirWhatsApp('5491159345836', '41')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_42">
+        <div class="cabecera">
+            <span class="badge">#42</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_42" onchange="toggleManual('42')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491162622733</div>
+        <button onclick="abrirWhatsApp('5491162622733', '42')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_43">
+        <div class="cabecera">
+            <span class="badge">#43</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_43" onchange="toggleManual('43')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491164183799</div>
+        <button onclick="abrirWhatsApp('5491164183799', '43')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_44">
+        <div class="cabecera">
+            <span class="badge">#44</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_44" onchange="toggleManual('44')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491164278584</div>
+        <button onclick="abrirWhatsApp('5491164278584', '44')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_45">
+        <div class="cabecera">
+            <span class="badge">#45</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_45" onchange="toggleManual('45')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491164550543</div>
+        <button onclick="abrirWhatsApp('5491164550543', '45')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_46">
+        <div class="cabecera">
+            <span class="badge">#46</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_46" onchange="toggleManual('46')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491165069104</div>
+        <button onclick="abrirWhatsApp('5491165069104', '46')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_47">
+        <div class="cabecera">
+            <span class="badge">#47</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_47" onchange="toggleManual('47')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491166294893</div>
+        <button onclick="abrirWhatsApp('5491166294893', '47')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_48">
+        <div class="cabecera">
+            <span class="badge">#48</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_48" onchange="toggleManual('48')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491170078506</div>
+        <button onclick="abrirWhatsApp('5491170078506', '48')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_49">
+        <div class="cabecera">
+            <span class="badge">#49</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_49" onchange="toggleManual('49')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491171651000</div>
+        <button onclick="abrirWhatsApp('5491171651000', '49')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_50">
+        <div class="cabecera">
+            <span class="badge">#50</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_50" onchange="toggleManual('50')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491172303460</div>
+        <button onclick="abrirWhatsApp('5491172303460', '50')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_51">
+        <div class="cabecera">
+            <span class="badge">#51</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_51" onchange="toggleManual('51')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491173732795</div>
+        <button onclick="abrirWhatsApp('5491173732795', '51')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_52">
+        <div class="cabecera">
+            <span class="badge">#52</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_52" onchange="toggleManual('52')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491176125544</div>
+        <button onclick="abrirWhatsApp('5491176125544', '52')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_53">
+        <div class="cabecera">
+            <span class="badge">#53</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_53" onchange="toggleManual('53')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491176577763</div>
+        <button onclick="abrirWhatsApp('5491176577763', '53')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_54">
+        <div class="cabecera">
+            <span class="badge">#54</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_54" onchange="toggleManual('54')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5491177128983</div>
+        <button onclick="abrirWhatsApp('5491177128983', '54')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_55">
+        <div class="cabecera">
+            <span class="badge">#55</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_55" onchange="toggleManual('55')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5493402529018</div>
+        <button onclick="abrirWhatsApp('5493402529018', '55')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_56">
+        <div class="cabecera">
+            <span class="badge">#56</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_56" onchange="toggleManual('56')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5493412764562</div>
+        <button onclick="abrirWhatsApp('5493412764562', '56')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_57">
+        <div class="cabecera">
+            <span class="badge">#57</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_57" onchange="toggleManual('57')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5493413235053</div>
+        <button onclick="abrirWhatsApp('5493413235053', '57')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_58">
+        <div class="cabecera">
+            <span class="badge">#58</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_58" onchange="toggleManual('58')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5493414569328</div>
+        <button onclick="abrirWhatsApp('5493414569328', '58')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_59">
+        <div class="cabecera">
+            <span class="badge">#59</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_59" onchange="toggleManual('59')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+5493484268230</div>
+        <button onclick="abrirWhatsApp('5493484268230', '59')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_60">
+        <div class="cabecera">
+            <span class="badge">#60</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_60" onchange="toggleManual('60')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91124548848</div>
+        <button onclick="abrirWhatsApp('91124548848', '60')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_61">
+        <div class="cabecera">
+            <span class="badge">#61</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_61" onchange="toggleManual('61')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91127555125</div>
+        <button onclick="abrirWhatsApp('91127555125', '61')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_62">
+        <div class="cabecera">
+            <span class="badge">#62</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_62" onchange="toggleManual('62')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91131369853</div>
+        <button onclick="abrirWhatsApp('91131369853', '62')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_63">
+        <div class="cabecera">
+            <span class="badge">#63</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_63" onchange="toggleManual('63')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91135051797</div>
+        <button onclick="abrirWhatsApp('91135051797', '63')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_64">
+        <div class="cabecera">
+            <span class="badge">#64</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_64" onchange="toggleManual('64')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91136698412</div>
+        <button onclick="abrirWhatsApp('91136698412', '64')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_65">
+        <div class="cabecera">
+            <span class="badge">#65</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_65" onchange="toggleManual('65')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91138863357</div>
+        <button onclick="abrirWhatsApp('91138863357', '65')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_66">
+        <div class="cabecera">
+            <span class="badge">#66</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_66" onchange="toggleManual('66')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91139433030</div>
+        <button onclick="abrirWhatsApp('91139433030', '66')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_67">
+        <div class="cabecera">
+            <span class="badge">#67</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_67" onchange="toggleManual('67')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91150219254</div>
+        <button onclick="abrirWhatsApp('91150219254', '67')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_68">
+        <div class="cabecera">
+            <span class="badge">#68</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_68" onchange="toggleManual('68')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91151169676</div>
+        <button onclick="abrirWhatsApp('91151169676', '68')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_69">
+        <div class="cabecera">
+            <span class="badge">#69</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_69" onchange="toggleManual('69')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91155235330</div>
+        <button onclick="abrirWhatsApp('91155235330', '69')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_70">
+        <div class="cabecera">
+            <span class="badge">#70</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_70" onchange="toggleManual('70')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91156221620</div>
+        <button onclick="abrirWhatsApp('91156221620', '70')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_71">
+        <div class="cabecera">
+            <span class="badge">#71</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_71" onchange="toggleManual('71')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91158663925</div>
+        <button onclick="abrirWhatsApp('91158663925', '71')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_72">
+        <div class="cabecera">
+            <span class="badge">#72</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_72" onchange="toggleManual('72')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91171651000</div>
+        <button onclick="abrirWhatsApp('91171651000', '72')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_73">
+        <div class="cabecera">
+            <span class="badge">#73</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_73" onchange="toggleManual('73')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91176125544</div>
+        <button onclick="abrirWhatsApp('91176125544', '73')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_74">
+        <div class="cabecera">
+            <span class="badge">#74</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_74" onchange="toggleManual('74')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91176577763</div>
+        <button onclick="abrirWhatsApp('91176577763', '74')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    <div class="tarjeta" id="card_75">
+        <div class="cabecera">
+            <span class="badge">#75</span>
+            <label class="check-box" title="Marcar/Desmarcar">
+                <input type="checkbox" id="check_75" onchange="toggleManual('75')">
+                <span>Enviado</span>
+            </label>
+        </div>
+        <div class="numero">+91177128983</div>
+        <button onclick="abrirWhatsApp('91177128983', '75')" class="btn-enviar">
+            🟢 Enviar
+        </button>
+    </div>
+    
+    </div>
 
     <script>
-        const textoMsg = "Hola%20buenos%20d%C3%ADas%20qu%C3%A9%20tal%21%21%0AQuer%C3%ADa%20consultar%20si%20se%20puede%20hablar%20con%20un%20gerente%20o%20supervisor%2C%20para%20hacer%20una%20propuesta%20comercial%2C%20muchas%20gracias%21";
+        const textoMsg = "Hola%20buenos%20d%C3%ADas%20qu%C3%A9%20tal%21%0AQuer%C3%ADa%20consultar%20si%20se%20puede%20hablar%20con%20un%20gerente%20o%20supervisor%2C%20para%20hacer%20una%20propuesta%20comercial%2C%20muchas%20gracias%21";
+        const totalTelefonos = 75;
 
-        function abrirWhatsApp(tel) {
-            // Detecta si es celular o computadora automáticamente
+        // 1. Abre WhatsApp Y marca automáticamente como enviado
+        function abrirWhatsApp(tel, id) {
+            marcarEstado(id, true);
+
             const esCelular = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-            
             if (esCelular) {
-                // Protocolo nativo de celular: salta a la aplicación instalada directo
                 window.location.href = "whatsapp://send?phone=" + tel + "&text=" + textoMsg;
             } else {
-                // En computadora salta a WhatsApp Web
                 window.open("https://web.whatsapp.com/send?phone=" + tel + "&text=" + textoMsg, "_blank");
             }
         }
 
-        function guardarEstado(id) {
+        // 2. Permite desmarcar o marcar con la casilla si se desea
+        function toggleManual(id) {
             const check = document.getElementById("check_" + id);
-            const card = document.getElementById("card_" + id);
-            if (check.checked) {
-                localStorage.setItem("wpp_" + id, "1");
-                card.classList.add("tarjeta-completada");
-            } else {
-                localStorage.removeItem("wpp_" + id);
-                card.classList.remove("tarjeta-completada");
-            }
+            marcarEstado(id, check.checked);
         }
 
-        // Restaurar casillas marcadas aunque se cierre el navegador
+        function marcarEstado(id, estado) {
+            const check = document.getElementById("check_" + id);
+            const card = document.getElementById("card_" + id);
+            
+            check.checked = estado;
+            if (estado) {
+                localStorage.setItem("wpp_" + id, "1");
+                card.classList.add("completada");
+            } else {
+                localStorage.removeItem("wpp_" + id);
+                card.classList.remove("completada");
+            }
+            actualizarProgreso();
+        }
+
+        function actualizarProgreso() {
+            let enviados = 0;
+            for (let i = 1; i <= totalTelefonos; i++) {
+                if (localStorage.getItem("wpp_" + i) === "1") {
+                    enviados++;
+                }
+            }
+            document.getElementById("conteo-enviados").innerText = enviados;
+        }
+
+        // Restaurar estado guardado
         window.onload = function() {
-            for (let i = 1; i <= 27; i++) {
+            for (let i = 1; i <= totalTelefonos; i++) {
                 if (localStorage.getItem("wpp_" + i) === "1") {
                     const check = document.getElementById("check_" + i);
                     const card = document.getElementById("card_" + i);
                     if (check && card) {
                         check.checked = true;
-                        card.classList.add("tarjeta-completada");
+                        card.classList.add("completada");
                     }
                 }
             }
+            actualizarProgreso();
         };
     </script>
 </body>
